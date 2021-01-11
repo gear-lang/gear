@@ -1,0 +1,87 @@
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+*.msi
+
+# Visual Studio temporary files
+*.suo
+*.user
+*.sbr
+*.pdb
+*.ncb
+*.sdf
+*.idb
+
+# Mac OS X
+.DS_Store
+
+# CMake out-of-source build files
+build
+Win32
+
+# Python files
+*.pyc
+
+# Autoconf and Automake files
+/autom4te.cache/
+/config/
+Makefile
+Makefile.in
+aclocal.m4
+app.info
+compile
+config.h
+config.h.in
+config.log
+config.status
+configure
+configure.scan
+coverage_report
+depcomp
+install-sh
+libtool
+missing
+stamp-h1
+m4
+*.html
+*.log
+*.o
+*.la
+*.so*
+*.a
+.deps
+*.tar*
+*.zip
+*.lo
+*.libs
+
+# pkg-config
+*.pc
+
+# Code Coverage
+*.gcov
+*.gcda
+*.gcno
+
+# Wix Installer
+*.wixobj
+*.wixpdb
