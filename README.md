@@ -21,6 +21,15 @@ A type-safe, embeddable programming language written in C with no external depen
 * Lightweight: the base runtime is only 71 KB.
 * Development tools: build system, language server, and remote debugger.
 
+## Contributing
+
+Gear accepts contributions for assigned issues only.
+Unsolicited pull requests will be closed.
+To be assigned an issue, comment on it and request assignment.
+
+Please read the CLA (Contributor License Agreement) prior to contributing to this project.
+The CLA allows Gear to be relicensed without requesting permission from contributors.
+
 ## License
 
 License pending.
