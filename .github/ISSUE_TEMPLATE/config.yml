@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Community Support
+    url: https://stackoverflow.com/questions/tagged/gear
+    about: Ask and answer questions here.
+  - name: Documentation
+    url: https://gear-lang.org/learn
+    about: Learn the language, standard library, tools, and embedding API.
