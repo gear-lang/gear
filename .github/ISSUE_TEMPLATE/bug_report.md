@@ -1,15 +1,15 @@
 ---
 name: Bug Report
-about: If something isn't working as expected
+about: If something isn't working as expected.
 title: ''
 labels: 'bug'
 assignees: ''
 ---
 
-<!------------------ READ ME FIRST ------------------
-  Do not delete this bug report template. If the
-  template is deleted, then the issue will be closed.
-  --------------------------------------------------->
+<!---------------------- READ ME FIRST ----------------------
+  Please do not delete this bug report template.
+  If the template is deleted, then the issue will be closed.
+  ----------------------------------------------------------->
 
 ## Description
 <!-- A clear and concise description of the bug and the steps to reproduce it. -->
