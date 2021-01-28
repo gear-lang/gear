@@ -23,9 +23,9 @@ A type-safe, embeddable programming language written in C with no external depen
 
 ## Contributing
 
-Gear accepts contributions for assigned issues only.
-Unsolicited pull requests will be closed.
+Gear accepts pull requests for assigned issues only.
 To be assigned an issue, comment on it and request assignment.
+Unsolicited pull requests will be closed.
 
 Please read the CLA (Contributor License Agreement) prior to contributing to this project.
 The CLA allows Gear to be relicensed without requesting permission from contributors.
