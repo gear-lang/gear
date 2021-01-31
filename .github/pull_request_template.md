@@ -8,6 +8,6 @@
   By contributing to this project you affirm that you have read and agreed to the
   Contributor License Agreement (CLA) found at the root of this repository.
   The CLA allows Gear to be relicensed without requesting permission from contributors.
+  Upon submitting a pull request, you will be prompted by a GitHub bot to sign the CLA.
   If you do not agree with the CLA, then do not contribute to this project.
-  If you cannot locate the CLA, then do not open your pull request and contact us.
   ------------------------------------------------------------------------------------->
