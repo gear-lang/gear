@@ -77,27 +77,19 @@ typedef storage_type gear_int;
 #if defined(GEAR_INT_INT)
     typedef int gear_int;
     #define GEAR_FORMAT_INT "%d"
-    #define GEAR_INT_MAX INT_MAX
-    #define GEAR_INT_MIN INT_MIN
     #define GEAR_STRING_TO_INT(s,p,b) strtol((s), (p), (b))
 #elif defined(GEAR_INT_LONG)
     typedef long gear_int;
     #define GEAR_FORMAT_INT "%ld"
-    #define GEAR_INT_MAX LONG_MAX
-    #define GEAR_INT_MIN LONG_MIN
     #define GEAR_STRING_TO_INT(s,p,b) strtol((s), (p), (b))
 #elif defined(GEAR_INT_LONGLONG)
     #if defined(LLONG_MAX)
         typedef long long gear_int;
         #define GEAR_FORMAT_INT "%lld"
-        #define GEAR_INT_MAX LLONG_MAX
-        #define GEAR_INT_MIN LLONG_MIN
         #define GEAR_STRING_TO_INT(s,p,b) strtoll((s), (p), (b))
     #elif defined(_MSC_VER) /* The MSVC compiler defines its own 64-bit type and limits. */
         typedef __int64 gear_int;
         #define GEAR_FORMAT_INT "%I64d"
-        #define GEAR_INT_MAX _I64_MAX
-        #define GEAR_INT_MIN _I64_MIN
         #define GEAR_STRING_TO_INT(s,p,b) strtoll((s), (p), (b))
     #else
         #error "Compiler does not support 'long long'. Use option '-DGEAR_INT_LONG' (see 'gear_config.h' for details)"
@@ -127,18 +119,15 @@ typedef storage_type gear_float;
 #if defined(GEAR_FLOAT_FLOAT)
     typedef float gear_float;
     #define GEAR_FORMAT_REAL "%.7g"
-    #define GEAR_FLOAT_MAX FLT_MAX
-    #define GEAR_STRING_TO_FLOAT(s,p) strtof((s), (p))
+    #define GEAR_FLOAT_SUFFIX(F) F##f
 #elif defined(GEAR_FLOAT_DOUBLE)
     typedef double gear_float;
     #define GEAR_FORMAT_REAL "%.14g"
-    #define GEAR_FLOAT_MAX DBL_MAX
-    #define GEAR_STRING_TO_FLOAT(s,p) strtod((s), (p))
+    #define GEAR_FLOAT_SUFFIX(F) F
 #elif defined(GEAR_FLOAT_LONGDOUBLE)
     typedef long double gear_float;
     #define GEAR_FORMAT_REAL "%.19Lg"
-    #define GEAR_FLOAT_MAX LDBL_MAX
-    #define GEAR_STRING_TO_FLOAT(s,p) strtold((s), (p))
+    #define GEAR_FLOAT_SUFFIX(F) F##L
 #else
     #error "Numeric float type not defined"
 #endif
