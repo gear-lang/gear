@@ -78,19 +78,23 @@ typedef storage_type gear_int;
     typedef int gear_int;
     #define GEAR_FORMAT_INT "%d"
     #define GEAR_STRING_TO_INT(s,p,b) strtol((s), (p), (b))
+    #define GEAR_INT_SUFFIX(N) N
 #elif defined(GEAR_INT_LONG)
     typedef long gear_int;
     #define GEAR_FORMAT_INT "%ld"
     #define GEAR_STRING_TO_INT(s,p,b) strtol((s), (p), (b))
+    #define GEAR_INT_SUFFIX(N) N##l
 #elif defined(GEAR_INT_LONGLONG)
     #if defined(LLONG_MAX)
         typedef long long gear_int;
         #define GEAR_FORMAT_INT "%lld"
         #define GEAR_STRING_TO_INT(s,p,b) strtoll((s), (p), (b))
+        #define GEAR_INT_SUFFIX(N) N##ll
     #elif defined(_MSC_VER) /* The MSVC compiler defines its own 64-bit type and limits. */
         typedef __int64 gear_int;
         #define GEAR_FORMAT_INT "%I64d"
         #define GEAR_STRING_TO_INT(s,p,b) strtoll((s), (p), (b))
+        #define GEAR_INT_SUFFIX(N) N##ll
     #else
         #error "Compiler does not support 'long long'. Use option '-DGEAR_INT_LONG' (see 'gear_config.h' for details)"
     #endif
@@ -175,5 +179,21 @@ typedef storage_type gear_float;
 #define GEAR_DISABLE_UNICODE_STRING_LIBRARY
 #endif
 //#define GEAR_DISABLE_UNICODE_STRING_LIBRARY
+
+/*! \brief Determines if Unicode code point data needed by the Gear runtime is tightly packed in memory.
+ *
+ *  The Unicode code point data set needed by the Gear runtime can be tightly packed to reduce its size.
+ *  Doing so reduces its footprint by ~25%, but at the expense of performance since unaligned memory access
+ *  is slower on architectures that permit it (like x86 and amd64).
+ *
+ *  \note
+ *  Strict alignment architectures, like SPARC, do not support unaligned memory access.
+ *
+ *  This feature is disabled by default because it may or may not be supported by the systems architecture.
+ */
+#ifdef DOXYGEN
+#define GEAR_COMPRESS_UNICODE_TABLE
+#endif
+//#define GEAR_COMPRESS_UNICODE_TABLE
 
 #endif
