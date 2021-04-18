@@ -163,7 +163,7 @@ GEAR_API void gear_implement_function(gear_runtime *runtime, const char *name, g
  *
  *  \since 0.1.0
  */
-GEAR_API void gear_load_function(struct gear_runtime *runtime, gear_register reg, const char *name);
+GEAR_API void gear_load_function(gear_runtime *runtime, gear_register reg, const char *name);
 
 /*! \brief Calls a function with zero or more arguments.
  *
@@ -192,7 +192,7 @@ GEAR_API void gear_load_function(struct gear_runtime *runtime, gear_register reg
  *
  *  \since 0.1.0
  */
-GEAR_API void gear_call(struct gear_runtime* runtime, gear_register reg, int argc);
+GEAR_API void gear_call(gear_runtime* runtime, gear_register reg, int argc);
 
 /*! \brief Calls a function with zero or more arguments by its string name.
  *
