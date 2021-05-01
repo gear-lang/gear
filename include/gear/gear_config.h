@@ -1,14 +1,11 @@
 /*! \file gear_config.h
  *  \brief This header defines the general configuration shared between the Gear compiler and runtime.
  *
- *  This header defines the common configuration used by Gear.
- *  All of Gear's features are enabled by default, but this header can be edited to disable or
- *  reconfigure a feature.
- *  Alternatively, features can be disabled by passing the appropriate preprocessor directives
- *  during the build process.
+ *  All features are enabled by default, but this header can be edited to disable or reconfigure a feature.
+ *  Alternatively, features can be disabled by passing the appropriate preprocessor directives during compilation.
  *
  *  \note
- *  If this header is modified, then the Gear compiler and runtime must both be rebuilt to reflect the changes.
+ *  If this header is modified, then the Gear compiler, runtime, and tool suite must be completely rebuilt.
  */
 
 #ifndef GEAR_CONFIG_API_H
@@ -53,6 +50,34 @@
  *  The patch version of Gear as an integer.
  */
 #define GEAR_VERSION_PATCH 1
+
+/*! \brief A boolean type compatible with pre-C99 compilers.
+ *
+ *  Gear aliases C's `_Bool` type when building with a compiler supporting C99 or newer.
+ *  It aliases an integer type when compiled with a pre-C99 compiler.
+ *  User's of these older compilers should use the integer `0` for false and `1` for true.
+ *  User's of C99 (or newer) can do the same or use the `true` and `false` macros defined in `stdbool.h`.
+ */
+#ifdef DOXYGEN
+typedef _Bool gear_bool;
+#endif
+/* The Microsoft Visual C++ compiler does not define the __STDC_VERSION__ macro despite supporting
+   most C99 feature since MSVC 2013. This means an additional _MSC_VER check is required below. */
+#if (__STDC_VERSION__ >= 199901L) || (defined(_MSC_VER) && _MSC_VER >= 1800)
+typedef _Bool gear_bool;
+#else
+typedef unsigned char gear_bool;
+#endif
+
+/*! \brief A single Unicode code point.
+ *
+ *  A "character" in Gear refers to a single Unicode code point.
+ *  This typedef defines an integer large enough to hold one code point.
+ *
+ *  Unicode defines code points to be at most 21-bits with the largest being 0x10FFFF.
+ *  C's `long` type is used because it's guaranteed to be at least 32-bits.
+ */
+typedef long gear_char;
 
 /*! \brief Defines the integer storage type used by the Gear runtime.
  * 
