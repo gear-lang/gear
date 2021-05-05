@@ -10,6 +10,12 @@
 
 #include "gear_config.h"
 
+// Type aliases for enumerations are defined seperatly from their definitions to prevent Doxygen
+// from generating duplicate documention: once for the typedef and again for the enumeration.
+typedef enum gear_warning_type gear_warning_type;
+typedef enum gearc_unit_property gearc_unit_property;
+typedef enum gearc_target_type gearc_target_type;
+
 /*! \brief This enumeration defines the complete list of warnings the Gear compiler can emit.
  *
  *  The elements of this enumeration should be used in conjunction with the functions
@@ -19,7 +25,7 @@
  *  \sa gearc_warning_toggle
  *  \sa gearc_warning_status
  */
-typedef enum gear_warning_type
+enum gear_warning_type
 {
     /*! \brief Represents all warnings.
      *
@@ -252,7 +258,7 @@ typedef enum gear_warning_type
      *  This will always be the last value of the enumeration.
      */
     GEAR_WARN_COUNT,
-} gear_warning_type;
+};
 
 /*! \brief Defines the properties associated with a compilation unit.
  *
@@ -263,7 +269,7 @@ typedef enum gear_warning_type
  *  \sa gearc_unit_set_property
  *  \sa gearc_unit_get_property
  */
-typedef enum gearc_unit_property
+enum gearc_unit_property
 {
     /*! \brief Indicates if the compilation unit is the main entry point.
      *
@@ -332,7 +338,7 @@ typedef enum gearc_unit_property
      * \endcode
      */
     GEAR_UNIT_SOURCE,
-} gearc_unit_property;
+};
 
 /*! \brief Defines the different output targets.
  *
@@ -340,7 +346,7 @@ typedef enum gearc_unit_property
  *
  *  \sa gearc_build
  */
-typedef enum gearc_target_type
+enum gearc_target_type
 {
     /*! \brief Application target.
      *
@@ -388,7 +394,7 @@ typedef enum gearc_target_type
      * \endcode
      */
     GEAR_TARGET_TEST,
-} gearc_target_type;
+};
 
 /*! \brief The Gear compiler manages all data pertaining to interactions with the compiler library.
  *

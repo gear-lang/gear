@@ -1,8 +1,7 @@
 /*! \file gear_runtime.h
- *  \brief This header defines the Gear Runtime API.
  *
- *  This header defines the API for managing a Gear runtime.
- *  Consumers of this header must link against `gear.lib` on Windows and `libgear.a` on *nix systems.
+ *  The gear_runtime.h header defines the C API for creating and managing an instance of a Gear runtime.
+ *  Consumers of this header must link against either `libgear.a` (`gear.lib` on Windows) or `libgearrt.a` (`gearrt.lib` on Windows).
  */
 
 #ifndef GEAR_RUNTIME_API_H
@@ -12,10 +11,9 @@
 
 /*! \brief Represents an instance of a Gear runtime.
  *
- *  A Gear runtime is responsible for managing the virtual machine and garbage collector.
- *  There are no limits on how many runtime's can be created and they are entirely self contained.
- *
- *  All public API operations in this header require a pointer to a #gear_runtime.
+ *  A Gear runtime is responsible for managing the virtual machine, garbage collector, and providing
+ *  the base implemention of the standard library. There are no limits on how many runtime's can be
+ *  created and they are entirely self contained.
  *
  *  \sa gear_new_from_file
  *  \sa gear_new_from_memory

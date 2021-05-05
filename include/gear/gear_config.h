@@ -63,7 +63,9 @@ typedef _Bool gear_bool;
 #endif
 /* The Microsoft Visual C++ compiler does not define the __STDC_VERSION__ macro despite supporting
    most C99 feature since MSVC 2013. This means an additional _MSC_VER check is required below. */
-#if (__STDC_VERSION__ >= 199901L) || (defined(_MSC_VER) && _MSC_VER >= 1800)
+#ifdef __cplusplus
+typedef bool gear_bool;
+#elif (__STDC_VERSION__ >= 199901L) || (defined(_MSC_VER) && _MSC_VER >= 1800)
 typedef _Bool gear_bool;
 #else
 typedef unsigned char gear_bool;
