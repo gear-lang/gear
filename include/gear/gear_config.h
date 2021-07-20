@@ -14,8 +14,8 @@
 /*! \brief This preprocessor directive must be defined when building Gear as a dynamic link library (.DLL) on Windows.
  *
  *  This preprocessor directive is defined by default when building Gear using its build scripts. 
- *  If Gear is being integrated with a different build system, then it should define this directive.
- *  This directive should \b not be defined if Gear is being built as a static library.
+ *  If Gear is integrated with a foreign build system, then it must define this directive when
+ *  building Gear as a dynamic library.
  */
 #if defined(_WIN32) && defined(GEAR_SHARED_OBJECT)
 #define GEAR_API __declspec(dllexport)
@@ -51,41 +51,48 @@
  */
 #define GEAR_VERSION_PATCH 1
 
-/*! \brief A boolean type compatible with pre-C99 compilers.
- *
- *  Gear aliases C's `_Bool` type when building with a compiler supporting C99 or newer.
- *  It aliases an integer type when compiled with a pre-C99 compiler.
- *  User's of these older compilers should use the integer `0` for false and `1` for true.
- *  User's of C99 (or newer) can do the same or use the `true` and `false` macros defined in `stdbool.h`.
- */
-#ifdef DOXYGEN
-typedef _Bool gear_bool;
-#endif
-/* The Microsoft Visual C++ compiler does not define the __STDC_VERSION__ macro despite supporting
-   most C99 feature since MSVC 2013. This means an additional _MSC_VER check is required below. */
-#ifdef __cplusplus
-typedef bool gear_bool;
-#elif (__STDC_VERSION__ >= 199901L) || (defined(_MSC_VER) && _MSC_VER >= 1800)
-typedef _Bool gear_bool;
-#else
-typedef unsigned char gear_bool;
-#endif
-
-/*! \brief A single Unicode code point.
+/*! \brief Defines the Unicode character storage type used by Gear.
  *
  *  A "character" in Gear refers to a single Unicode code point.
- *  This typedef defines an integer large enough to hold one code point.
+ *  A Unicode code point is defined to be at most 21-bits with the largest being 0x10FFFF.
  *
- *  Unicode defines code points to be at most 21-bits with the largest being 0x10FFFF.
- *  C's `long` type is used because it's guaranteed to be at least 32-bits.
+ *  Define one of the following preprocessor definitions to choose which
+ *  character storage type is used by Gear's \c Char type.
+ *  By default, Gear will use the `long` type since it does not require the `stdint.h` header.
+ *
+ *  Preprocessor Definition | C Storage Type
+ *  ----------------------- | --------------
+ *  GEAR_CHAR_LONG          | long
+ *  GEAR_CHAR_INT32         | int32_t
+ *
+ *  The header can be modified to use any integer type, but it must be at least 21-bits.
  */
-typedef long gear_char;
+#ifdef DOXYGEN
+typedef storage_type gear_char;
+#endif
+#if !defined(GEAR_CHAR_LONG) && !defined(GEAR_CHAR_INT32)
+#define GEAR_CHAR_LONG /* The default configuration. */
+#endif
+#if defined(GEAR_CHAR_LONG)
+    typedef long gear_char;
+#elif defined(GEAR_CHAR_INT32)
+    #if defined(_MSC_VER)
+        typedef __int32 gear_char;
+    #else
+        /* The stdint.h header defines int32_t which is needed to define gear_char.
+           If stdint.h is not available, then please modify the typedef to use a 32-bit integer type. */
+        #include <stdint.h>
+        typedef int32_t gear_char;
+    #endif
+#else
+    #error "Unicode character type not defined"
+#endif
 
-/*! \brief Defines the integer storage type used by the Gear runtime.
- * 
+/*! \brief Defines the integer storage type used by the Gear.
+ *
  *  Define one of the following preprocessor definitions to choose which 
  *  integer storage type is used by Gear's \c Int type.
- *  By default, Gear will pick the largest integer type available.
+ *  By default, Gear will use the largest integer type available.
  *
  *  Preprocessor Definition | C Storage Type
  *  ----------------------- | --------------
@@ -112,22 +119,15 @@ typedef storage_type gear_int;
     #define GEAR_STRING_TO_INT(s,p,b) strtol((s), (p), (b))
     #define GEAR_INT_SUFFIX(N) N##l
 #elif defined(GEAR_INT_LONGLONG)
-    #if defined(LLONG_MAX)
-        typedef long long gear_int;
-        #define GEAR_FORMAT_INT "%lld"
-        #define GEAR_STRING_TO_INT(s,p,b) strtoll((s), (p), (b))
-        #define GEAR_INT_SUFFIX(N) N##ll
-    #elif defined(_MSC_VER) /* The MSVC compiler defines its own 64-bit type and limits. */
-        typedef __int64 gear_int;
-        #define GEAR_FORMAT_INT "%I64d"
-        #define GEAR_STRING_TO_INT(s,p,b) strtoll((s), (p), (b))
-        #define GEAR_INT_SUFFIX(N) N##ll
-    #else
-        #error "Compiler does not support 'long long'. Use option '-DGEAR_INT_LONG' (see 'gear_config.h' for details)"
-    #endif
+    typedef long long gear_int;
+    #define GEAR_FORMAT_INT "%lld"
+    #define GEAR_STRING_TO_INT(s,p,b) strtoll((s), (p), (b))
+    #define GEAR_INT_SUFFIX(N) N##ll
+#else
+    #error "Numeric integer type not defined"
 #endif
 
- /*! \brief Defines the floating point storage type used by the Gear runtime.
+/*! \brief Defines the floating point storage type used by the Gear.
  *
  *  Define one of the following preprocessor definitions to choose which 
  *  floating point storage type is used by Gear's \c Float type.
@@ -141,7 +141,7 @@ typedef storage_type gear_int;
  *
  *  The header can be modified to use any floating point type, but it's must be a \e signed type.
  */
- #ifdef DOXYGEN
+#ifdef DOXYGEN
 typedef storage_type gear_float;
 #endif
 #if !defined(GEAR_FLOAT_FLOAT) && !defined(GEAR_FLOAT_DOUBLE) && !defined(GEAR_FLOAT_LONGDOUBLE)
@@ -162,65 +162,5 @@ typedef storage_type gear_float;
 #else
     #error "Numeric float type not defined"
 #endif
-
- /*! \brief Determines if the compiler is Unicode aware.
- * 
- *  The Gear compiler will build without Unicode support if this preprocessor directive is defined.
- *  By default, the Gear compiler will build with full Unicode support.
- *  This means it will recognize Unicode space characters and line endings as well as
- *  alphanumeric characters and Emoji in identifiers.
- *
- *  \note
- *  The Gear compiler \e always allows Unicode characters inside strings and comments
- *  regardless of whether this feature is enabled or disabled.
- *  This feature has no effect on the runtime.
- *  The C API can still lookup symbols with Unicode characters so long as the given C string is valid UTF-8.
- *
- *  Disabling this feature decreases the size of the compiler by around 200 KB!
- *  For this reason, if the compiler is being embedded on a system with limited resources, then
- *  this feature can be disabled to save space.
- */
-#ifdef DOXYGEN
-#define GEAR_DISABLE_UNICODE_COMPILER
-#endif
-//#define GEAR_DISABLE_UNICODE_COMPILER
-
-/*! \brief Determines if the string library is Unicode aware.
- *
- *  The string library will build without Unicode support if this preprocessor directive is defined.
- *  By default, the Gear string library will build with full Unicode support.
- *  That means character query and transformation functions like isDigit() and toUpper() will understand Unicode
- *  characters. If this feature is disabled, then the string library will only understand ASCII.
- *
- *  \note
- *  Gear strings are \e always UTF-8 encoded and the string library \e always understands how to index
- *  Unicode characters regardless of whether this feature is enabled or disabled.
- *  This feature solely affects the behavior of character query and transformation functions.
- *
- *  Disabling this feature decreases the size of the runtime by around 200 KB!
- *  For this reason, if the runtime is being embedded on a system with limited resources and/or does not need 
- *  Unicode aware character transformation and query functions, then this feature can be disabled to reduce
- *  Gear's footprint.
- */
-#ifdef DOXYGEN
-#define GEAR_DISABLE_UNICODE_STRING_LIBRARY
-#endif
-//#define GEAR_DISABLE_UNICODE_STRING_LIBRARY
-
-/*! \brief Determines if Unicode code point data needed by the Gear runtime is tightly packed in memory.
- *
- *  The Unicode code point data set needed by the Gear runtime can be tightly packed to reduce its size.
- *  Doing so reduces its footprint by ~25%, but at the expense of performance since unaligned memory access
- *  is slower on architectures that permit it (like x86 and amd64).
- *
- *  \note
- *  Strict alignment architectures, like SPARC, do not support unaligned memory access.
- *
- *  This feature is disabled by default because it may or may not be supported by the systems architecture.
- */
-#ifdef DOXYGEN
-#define GEAR_COMPRESS_UNICODE_TABLE
-#endif
-//#define GEAR_COMPRESS_UNICODE_TABLE
 
 #endif
