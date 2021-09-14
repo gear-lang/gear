@@ -11,6 +11,10 @@
 #ifndef GEAR_CONFIG_API_H
 #define GEAR_CONFIG_API_H
 
+/* The "stdint.h" header (available in C99 and C++11) is needed to build Gear.
+   If it's not available on your platform, then it must be created manually or downloaded. */
+#include <stdint.h>
+
 /*! \brief This preprocessor directive must be defined when building Gear as a dynamic link library (.DLL) on Windows.
  *
  *  This preprocessor directive is defined by default when building Gear using its build scripts. 
@@ -54,39 +58,18 @@
 /*! \brief Defines the Unicode character storage type used by Gear.
  *
  *  A "character" in Gear refers to a single Unicode code point.
- *  A Unicode code point is defined to be at most 21-bits with the largest being 0x10FFFF.
+ *  The largest Unicode code point is numerically defined is 0x10FFFF
+ *  which requires an integer with at least 21-bits.
  *
- *  Define one of the following preprocessor definitions to choose which
- *  character storage type is used by Gear's \c Char type.
- *  By default, Gear will use the `long` type since it does not require the `stdint.h` header.
+ *  \note
+ *  The typedef can be modified to use any integer type (signed or unsigned), but it must be at least 21-bits.
  *
- *  Preprocessor Definition | C Storage Type
- *  ----------------------- | --------------
- *  GEAR_CHAR_LONG          | long
- *  GEAR_CHAR_INT32         | int32_t
- *
- *  The header can be modified to use any integer type, but it must be at least 21-bits.
+ *  By default, this type aliases `uint_least32_t` making it identical with C11 and C++20's `char32_t` type.
+ *  This allows UTF-32 encoded string literals `U"..."` and character literals `U' '` to be
+ *  assigned to and from this type.
  */
-#ifdef DOXYGEN
-typedef storage_type gear_char;
-#endif
-#if !defined(GEAR_CHAR_LONG) && !defined(GEAR_CHAR_INT32)
-#define GEAR_CHAR_LONG /* The default configuration. */
-#endif
-#if defined(GEAR_CHAR_LONG)
-    typedef long gear_char;
-#elif defined(GEAR_CHAR_INT32)
-    #if defined(_MSC_VER)
-        typedef __int32 gear_char;
-    #else
-        /* The stdint.h header defines int32_t which is needed to define gear_char.
-           If stdint.h is not available, then please modify the typedef to use a 32-bit integer type. */
-        #include <stdint.h>
-        typedef int32_t gear_char;
-    #endif
-#else
-    #error "Unicode character type not defined"
-#endif
+typedef uint_least32_t gear_char;
+#define GEAR_FORMAT_CHAR "%04X"
 
 /*! \brief Defines the integer storage type used by the Gear.
  *
