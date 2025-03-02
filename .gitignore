@@ -1,8 +1,6 @@
 # Object files
 *.o
-*.ko
 *.obj
-*.elf
 
 # Libraries
 *.lib
@@ -15,11 +13,7 @@
 
 # Executables
 *.exe
-*.out
 *.app
-*.i*86
-*.x86_64
-*.hex
 *.msi
 
 # Visual Studio temporary files
@@ -36,7 +30,6 @@
 
 # CMake out-of-source build files
 build
-Win32
 
 # Python files
 *.pyc
@@ -76,12 +69,3 @@ m4
 
 # pkg-config
 *.pc
-
-# Code Coverage
-*.gcov
-*.gcda
-*.gcno
-
-# Wix Installer
-*.wixobj
-*.wixpdb
